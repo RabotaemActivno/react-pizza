@@ -12,16 +12,12 @@ export function Categories() {
         'Закрытые',
     ]
 
-    const onClickCategory = (index) => {
-        setActiveIndex(index)
-    }
-
     return (
         <div className="categories">
             <ul>
                 {
                     categories.map((value, index) => {
-                        return <li className={activeIndex === index ? "active" : ''} onClick={() => onClickCategory(index)}>{value}</li>
+                        return <li key={index} className={activeIndex === index ? "active" : ''} onClick={() => setActiveIndex(index)}>{value}</li>
                     })
                 }
             </ul>
