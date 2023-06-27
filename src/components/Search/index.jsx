@@ -1,17 +1,34 @@
-import React, { useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import styles from './Serach.module.scss'
 import { ReactComponent as SearchSVG } from './search_icon.svg'
 import { ReactComponent as CloseSVG } from './close_icon.svg'
 import { useContext } from "react";
 import { SearchContext } from "../../App";
+import debounce from "lodash.debounce";
+
+
+
+
 
 export function Search() {
-
-    const { searchValue, setSearchValue } = useContext(SearchContext)
+    const [value, setValue] = useState('')
+    const { setSearchValue } = useContext(SearchContext)
     const inputRef = useRef()
     const onClickClear = () => {
         setSearchValue('')
+        setValue('')
         inputRef.current.focus()
+    }
+
+
+    const updateSearchValue = useCallback(
+        debounce((str)=> {
+            setSearchValue(str)
+        }, 500), []
+    )
+    const onChangeInput = e => {
+        setValue(e.target.value)
+        updateSearchValue(e.target.value)
     }
 
     return (
@@ -21,9 +38,9 @@ export function Search() {
                 ref={inputRef}
                 className={styles.input}
                 placeholder="Поиск пиццы..."
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)} />
-            {searchValue && <CloseSVG onClick={onClickClear} className={styles.close_icon} />}
+                value={value}
+                onChange={onChangeInput} />
+            {value && <CloseSVG onClick={onClickClear} className={styles.close_icon} />}
         </div>
     )
 }
