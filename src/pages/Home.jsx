@@ -1,26 +1,23 @@
 import { Sort } from '../components/Sort';
 import { Categories } from '../components/Categories';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { PizzaBlock } from '../components/PizzaBlock/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import { Pagination } from '../components/Pagination';
-import { useContext } from 'react';
-import { SearchContext } from '../App';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCategoryId, setCurrentPage, setFilters } from '../redux/slice/filterSlice';
-import { useNavigate } from 'react-router-dom';
+import { selectFilter, setCategoryId, setCurrentPage, setFilters } from '../redux/slice/filterSlice';
+import { useNavigate, Link } from 'react-router-dom';
 import qs from 'qs'
 import { sortList } from '../components/Sort'
-import { fetchPizzas, setItems } from '../redux/slice/pizzasSlice';
+import { fetchPizzas, selectPizzaData, setItems } from '../redux/slice/pizzasSlice';
 
 export function Home() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isSearch = useRef(false);
-    const { searchValue } = useContext(SearchContext);
     const isMounted = useRef(false);
-    const { categoryId, sort, currentPage } = useSelector(state => state.filter);
-    const { status, items } = useSelector(state => state.pizza);
+    const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
+    const { status, items } = useSelector(selectPizzaData);
 
     const onChangeCategory = (id) => {
         dispatch(setCategoryId(id));
@@ -79,7 +76,10 @@ export function Home() {
         isMounted.current = true;
     }, [categoryId, sort.sortProperty, currentPage]);
 
-    const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+    const pizzas = items.map((obj) => (
+        <Link to={`/pizza/${obj.id}`} key={obj.id} >
+            <PizzaBlock {...obj} />
+        </Link>));
     const skeletons = [...new Array(6)].map((_, i) => <Skeleton key={i} />);
 
     return (
