@@ -13,7 +13,8 @@ export function PizzaBlock({id, title, price, imageUrl, sizes, types }) {
 
     const dispatch = useDispatch()
 
-    const onClickAdd = () => {
+    const onClickAdd = (e) => {
+        e.preventDefault( )
         const item = {
             id,
             title,
@@ -34,7 +35,7 @@ export function PizzaBlock({id, title, price, imageUrl, sizes, types }) {
                     alt="Pizza"
                 />
                 <h4 className="pizza-block__title">{title}</h4>
-                <div className="pizza-block__selector">
+                <div className="pizza-block__selector" onClick={(e)=>e.preventDefault()}>
                     <ul>
                         {
                             types.map((type) => (
