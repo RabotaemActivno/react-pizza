@@ -1,5 +1,10 @@
 
-export function Categories({ value, onChangeCategory }) {
+type CategoriesPropsType = {
+    value: number;
+    onChangeCategory: (i: number) => void 
+}
+
+export const Categories: React.FC<CategoriesPropsType> = ({ value, onChangeCategory }) => {
 
     const categories = [
         'Все',

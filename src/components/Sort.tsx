@@ -19,16 +19,17 @@ export function Sort() {
 
     const dispatch = useDispatch()
     const sort = useSelector(selectSort)
-    const sortRef = useRef()
+    const sortRef = useRef<HTMLDivElement>(null)
 
     const [open, setOpen] = useState(false);
-    const onClickHandler = (obj) => {
+
+    const onClickHandler = (obj: SortListType) => {
         dispatch(setSort(obj))
         setOpen(false)
     }
 
     useEffect(() => {
-        const handleClickOutside = (e) => {
+        const handleClickOutside = (e:any) => {
             if (!e.composedPath().includes(sortRef.current)) {
               setOpen(false);
             }

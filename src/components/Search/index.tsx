@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
 import styles from './Serach.module.scss'
-import { ReactComponent as SearchSVG } from './search_icon.svg'
-import { ReactComponent as CloseSVG } from './close_icon.svg'
+import searchSVG from './search_icon.svg'
+import closeSVG  from './close_icon.svg'
 import debounce from "lodash.debounce";
 import { useDispatch } from "react-redux";
 import { setSearchValue } from "../../redux/slice/filterSlice";
@@ -10,15 +10,17 @@ import { setSearchValue } from "../../redux/slice/filterSlice";
 
 
 
-export function Search() {
+export const Search: React.FC = () => {
     const dispatch = useDispatch()
     const [value, setValue] = useState('')
-    const inputRef = useRef()
+    const inputRef = useRef<HTMLInputElement>(null)
 
     const onClickClear = () => {
         dispatch(setSearchValue(''))
         setValue('')
-        inputRef.current.focus()
+        if (inputRef.current) {
+            inputRef.current.focus()
+        }
     }
 
 
@@ -27,21 +29,21 @@ export function Search() {
             dispatch(setSearchValue(str))
         }, 500), []
     )
-    const onChangeInput = e => {
+    const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)
         updateSearchValue(e.target.value)
     }
 
     return (
         <div className={styles.root}>
-            <SearchSVG className={styles.icon} />
+            <img src={searchSVG} className={styles.icon} />
             <input
                 ref={inputRef}
                 className={styles.input}
                 placeholder="Поиск пиццы..."
                 value={value}
                 onChange={onChangeInput} />
-            {value && <CloseSVG onClick={onClickClear} className={styles.close_icon} />}
+            {value && <img onClick={onClickClear} src={closeSVG} className={styles.close_icon} />}
         </div>
     )
 }
